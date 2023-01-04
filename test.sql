@@ -1,0 +1,21 @@
+USE `StoreProject` ;
+
+SELECT * FROM bill;
+SELECT * FROM boss;
+SELECT * FROM cart;
+SELECT * FROM customer;
+SELECT * FROM date_price;
+SELECT * FROM dishwasher;
+SELECT * FROM employee;
+SELECT * FROM laundry;
+SELECT * FROM normal_employee;
+SELECT * FROM profile;
+SELECT * FROM provider;
+SELECT * FROM provider_has_ware;
+SELECT * FROM solardom;
+SELECT * FROM store;
+SELECT * FROM stove;
+SELECT * FROM television;
+SELECT * FROM vacuumcleaner;
+SELECT * FROM ware;
+SELECT * FROM ware_has_cart;
