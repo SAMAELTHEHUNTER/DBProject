@@ -111,6 +111,7 @@ INSERT INTO Boss(Employee_ID)
 CREATE TABLE IF NOT EXISTS `StoreProject`.`Customer` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(30) NOT NULL,
+  `City` VARCHAR(30) NOT NULL,
   `Store_ID` INT NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE INDEX `idcustomer_UNIQUE` (`ID` ASC) VISIBLE,
@@ -121,13 +122,13 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Customer` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ;
-INSERT INTO Customer( Name, Store_ID)
+INSERT INTO Customer( Name, City, Store_ID)
 	value
-    ( 'Maryam', 1),
-    ( 'Fateme', 1),
-    ( 'Zeynab', 1),
-    ( 'Sara', 1),
-    ( 'Zahra', 1);
+    ( 'Maryam', 'Tehran', 1),
+    ( 'Fateme', 'Mashhad', 1),
+    ( 'Zeynab', 'Yazd', 1),
+    ( 'Sara', 'Booshehr', 1),
+    ( 'Zahra', 'Sari', 1);
 
 
 
@@ -160,16 +161,17 @@ INSERT INTO Cart( Name, Total_Price, Customer_ID)
 CREATE TABLE IF NOT EXISTS `StoreProject`.`Provider` (
   `PID` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(30) NOT NULL,
+  `City` VARCHAR(30) NOT NULL,
   PRIMARY KEY (`PID`),
   UNIQUE INDEX `PID_UNIQUE` (`PID` ASC) VISIBLE)
 ;
-INSERT INTO Provider( Name)
+INSERT INTO Provider( Name, City)
 	VALUE
-    ( 'LG'),
-    ( 'Emersan'),
-    ( 'Bimax'),
-    ( 'Bosch'),
-    ( 'Philips');
+    ( 'LG', 'Tehran'),
+    ( 'Emersan', 'Tehran'),
+    ( 'Bimax', 'Yazd'),
+    ( 'Bosch', 'Esfahan'),
+    ( 'Philips', 'Tabriz');
 
 
 
@@ -224,6 +226,7 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Bill` (
   `Total_Price` INT NOT NULL,
   `Is_Paid` BIT(1) NOT NULL,
   `Cart_CID` INT NOT NULL,
+  `Date` date NOT NULL,
   PRIMARY KEY (`BID`),
   UNIQUE INDEX `BID_UNIQUE` (`BID` ASC) VISIBLE,
   INDEX `fk_Bill_Cart1_idx` (`Cart_CID` ASC) VISIBLE,
@@ -233,13 +236,13 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Bill` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ;
-INSERT INTO Bill( Total_Price, Is_Paid, Cart_CID)
+INSERT INTO Bill( Total_Price, Is_Paid, Cart_CID , Date)
 	VALUE
-    ( 15100, TRUE, 5),
-    ( 16200, FALSE, 1),
-    ( 17300, TRUE, 2),
-    ( 18400, FALSE, 3),
-    ( 19500, TRUE, 4);
+    ( 15100, TRUE, 5, '2022-08-09'),
+    ( 16200, FALSE, 1, '2022-08-12'),
+    ( 17300, TRUE, 2, '2022-08-01'),
+    ( 18400, FALSE, 3, '2022-07-10'),
+    ( 19500, TRUE, 4, '2022-06-20');
 
 
 
