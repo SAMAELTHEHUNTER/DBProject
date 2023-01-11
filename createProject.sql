@@ -420,6 +420,7 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Provider_has_Ware` (
   `Provider_PID` INT NOT NULL,
   `Ware_WID` INT NOT NULL,
   `Ware_Store_ID` INT NOT NULL,
+  `price` INT NULL,
   PRIMARY KEY (`Provider_PID`, `Ware_WID`, `Ware_Store_ID`),
   INDEX `fk_Provider_has_Ware_Ware1_idx` (`Ware_WID` ASC, `Ware_Store_ID` ASC) VISIBLE,
   INDEX `fk_Provider_has_Ware_Provider1_idx` (`Provider_PID` ASC) VISIBLE,
@@ -434,13 +435,13 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Provider_has_Ware` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ;
-INSERT INTO Provider_has_Ware(Provider_PID, Ware_WID, Ware_Store_ID)
+INSERT INTO Provider_has_Ware(Provider_PID, Ware_WID, Ware_Store_ID , price)
 	VALUE
-    (1, 6, 1),
-    (2, 12, 1),
-    (2, 7, 1),
-    (3, 2, 1),
-    (4, 2, 1);
+    (1, 6, 1, 1200),
+    (2, 12, 1, 1300),
+    (2, 7, 1, 1400),
+    (3, 2, 1, 1200),
+    (4, 2, 1, 1300);
 
 
 
