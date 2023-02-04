@@ -65,6 +65,7 @@ INSERT INTO Ware( Discount, Name, Store_ID, Price)
 
 
 
+
 -- `Employee`
 CREATE TABLE IF NOT EXISTS `StoreProject`.`Employee` (
   `ID` INT NOT NULL AUTO_INCREMENT,
@@ -72,7 +73,9 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Employee` (
   `Birth_Date` DATE NOT NULL,
   `Address` VARCHAR(45) NULL,
   `Store_ID` INT NOT NULL,
-  PRIMARY KEY (`ID`),
+  `password` VARCHAR(30) NOT NULL,
+  `userName` VARCHAR(30) NOT NULL,
+  PRIMARY KEY (`ID`, `userName`),
   UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
   INDEX `fk_Employee_Store1_idx` (`Store_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Employee_Store1`
@@ -81,13 +84,13 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Employee` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ;
-INSERT INTO Employee( Name, Birth_Date, Address, Store_ID)
+INSERT INTO Employee( Name, Birth_Date, Address, Store_ID , password , userName)
 	VALUES
-    ( 'Ali', '1380-12-11', 'Daneshjoo 1 Pelak 10', 1),
-    ( 'Mohammad', '1380-1-1', 'Daneshjoo 2 Pelak 20', 1),
-    ( 'Reza', '1380-1-2', 'Daneshjoo 3 Pelak 30', 1),
-    ( 'Mahdi', '2022-1-2', 'Daneshjoo 4 Pelak 40', 1),
-    ( 'Amir', '1380-1-5', 'Daneshjoo 5 Pelak 50', 1);
+    ( 'Ali', '1380-12-11', 'Daneshjoo 1 Pelak 10', 1, '1234', 'ali'),
+    ( 'Mohammad', '1380-1-1', 'Daneshjoo 2 Pelak 20', 1, '1234', 'mamad'),
+    ( 'Reza', '1380-1-2', 'Daneshjoo 3 Pelak 30', 1, '1234' , 'reza'),
+    ( 'Mahdi', '2022-1-2', 'Daneshjoo 4 Pelak 40', 1 , '1234' , 'mahdi'),
+    ( 'Amir', '1380-1-5', 'Daneshjoo 5 Pelak 50', 1 , '1234' , 'amir');
 
 
 
