@@ -73,9 +73,8 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Employee` (
   `Birth_Date` DATE NOT NULL,
   `Address` VARCHAR(45) NULL,
   `Store_ID` INT NOT NULL,
-  `password` VARCHAR(30) NOT NULL,
-  `userName` VARCHAR(30) NOT NULL,
-  PRIMARY KEY (`ID`, `userName`),
+  `password` VARCHAR(30) NULL,
+  PRIMARY KEY (`ID`),
   UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
   INDEX `fk_Employee_Store1_idx` (`Store_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Employee_Store1`
@@ -84,13 +83,13 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Employee` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ;
-INSERT INTO Employee( Name, Birth_Date, Address, Store_ID , password , userName)
+INSERT INTO Employee( Name, Birth_Date, Address, Store_ID)
 	VALUES
-    ( 'Ali', '1380-12-11', 'Daneshjoo 1 Pelak 10', 1, '1234', 'ali'),
-    ( 'Mohammad', '1380-1-1', 'Daneshjoo 2 Pelak 20', 1, '1234', 'mamad'),
-    ( 'Reza', '1380-1-2', 'Daneshjoo 3 Pelak 30', 1, '1234' , 'reza'),
-    ( 'Mahdi', '2022-1-2', 'Daneshjoo 4 Pelak 40', 1 , '1234' , 'mahdi'),
-    ( 'Amir', '1380-1-5', 'Daneshjoo 5 Pelak 50', 1 , '1234' , 'amir');
+    ( 'ali', '1380-12-11', 'Daneshjoo 1 Pelak 10', 1),
+    ( 'mohammad', '1380-1-1', 'Daneshjoo 2 Pelak 20', 1),
+    ( 'reza', '1380-1-2', 'Daneshjoo 3 Pelak 30', 1),
+    ( 'mahdi', '2022-1-2', 'Daneshjoo 4 Pelak 40', 1),
+    ( 'amir', '1380-1-5', 'Daneshjoo 5 Pelak 50', 1);
 
 
 
@@ -116,6 +115,7 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Customer` (
   `Name` VARCHAR(30) NOT NULL,
   `City` VARCHAR(30) NOT NULL,
   `Store_ID` INT NOT NULL,
+  `password` VARCHAR(30) NULL,
   PRIMARY KEY (`ID`),
   UNIQUE INDEX `idcustomer_UNIQUE` (`ID` ASC) VISIBLE,
   INDEX `fk_Customer_Store1_idx` (`Store_ID` ASC) VISIBLE,
@@ -127,11 +127,11 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Customer` (
 ;
 INSERT INTO Customer( Name, City, Store_ID)
 	value
-    ( 'Maryam', 'Tehran', 1),
-    ( 'Fateme', 'Mashhad', 1),
-    ( 'Zeynab', 'Yazd', 1),
-    ( 'Sara', 'Booshehr', 1),
-    ( 'Zahra', 'Sari', 1);
+    ( 'maryam', 'Tehran', 1),
+    ( 'fateme', 'Mashhad', 1),
+    ( 'zeynab', 'Yazd', 1),
+    ( 'sara', 'Booshehr', 1),
+    ( 'zahra', 'Sari', 1);
 
 
 
@@ -158,6 +158,39 @@ INSERT INTO Cart( Name, Total_Price, Customer_ID)
     ( 'D', 40000, 1),
     ( 'E', 50000, 1);
 
+
+-- Comments
+CREATE TABLE IF NOT EXISTS `StoreProject`.`comments` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `body` VARCHAR(100) NOT NULL,
+  `subject` VARCHAR(20) NOT NULL,
+  `Profile_PID` INT NOT NULL,
+  `rating` INT NOT NULL,
+    `Ware_WID` INT NOT NULL,
+  `Ware_Store_ID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `id_UNIQUE` (`ID` ASC) VISIBLE,
+  INDEX `fk_comments_Profile1_idx` (`Profile_PID` ASC) VISIBLE,
+  INDEX `fk_comments_Ware1_idx` (`Ware_WID` ASC, `Ware_Store_ID` ASC) VISIBLE,
+  CONSTRAINT `fk_comments_Profile1`
+    FOREIGN KEY (`Profile_PID`)
+    REFERENCES `StoreProject`.`Profile` (`PID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_comments_Ware1`
+    FOREIGN KEY (`Ware_WID` , `Ware_Store_ID`)
+    REFERENCES `StoreProject`.`Ware` (`WID` , `Store_ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+INSERT INTO comments( body , subject, Profile_PID , rating, Ware_WID, Ware_Store_ID) value
+	('aaalii', 'ez', 1, 5, 2, 1),
+    ('asfsafedq', 'sadas', 1, 3, 2, 1),
+    ('qwdfrda', 'wdasd', 3, 1, 3, 1),
+    ('wqewqsdac', 'essdsc', 4, 2, 3, 1),
+    ('asvdf', 'qsadwq', 1, 3, 5, 1),
+    ('dqdqw', 'qwdevf', 2, 4, 5, 1);
 
 
 -- `Provider`
