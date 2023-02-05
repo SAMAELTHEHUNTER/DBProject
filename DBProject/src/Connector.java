@@ -19,12 +19,17 @@ public class Connector {
                 System.out.println("do you have account?");
                 System.out.println("1-sign up");
                 System.out.println("2-sign in");
+                System.out.println("3-exit");
                 answer = input.nextInt();
                 if (answer == 1) {
                     signUp(db);
                     answer = 0;
                 } else if (answer == 2) {
                     login(db);
+                } else if (answer == 3) {
+                    return;
+                } else {
+                    System.out.println("please enter valid input!");
                 }
             }
 
@@ -50,7 +55,7 @@ public class Connector {
                 st.execute("grant select, update on storeproject.customer to '" + name + "'@'127.0.0.1' with grant option;");
                 st.execute("grant update, delete, select, insert on storeproject.ware to '" + name + "'@'127.0.0.1';");
                 st.execute("update employee set password = '" + password + "' where name = '" + name + "' ;");
-                System.out.println("user: " + name + "password: " + password + "admin signup");
+//                System.out.println("user: " + name + "password: " + password + "admin signup");
                 is_signedUp = true;
                 break;
             }
@@ -65,7 +70,7 @@ public class Connector {
                     st.execute("CREATE USER IF NOT EXISTS '" + name + "'@'127.0.0.1' IDENTIFIED BY '" + password + "'");
                     st.execute("grant select, update on storeproject.customer to '" + name + "'@'127.0.0.1';");
                     st.execute("update customer set password = '" + password + "' where name = '" + name + "' ;");
-                    System.out.println("user: " + name + "password: " + password + "not admin signup");
+//                    System.out.println("user: " + name + "password: " + password + "not admin signup");
                     is_signedUp = true;
                     break;
                 }
@@ -89,10 +94,12 @@ public class Connector {
                     if (password.equalsIgnoreCase(rs.getString(1))) {
                         is_admin = true;
                         Connection user = DriverManager.getConnection("jdbc:mysql://localhost:3306/storeproject", name, password);
-                        System.out.println("user: " + name + " password: " + password + " admin");
+//                        System.out.println("user: " + name + " password: " + password + " admin");
                         is_login = true;
                         userControl(user, name, db);
                         break;
+                    } else {
+                        System.out.println("wrong password!");
                     }
                 }
                 break;
@@ -109,10 +116,12 @@ public class Connector {
                     while (rs.next()) {
                         if (password.equalsIgnoreCase(rs.getString(1))) {
                             Connection user = DriverManager.getConnection("jdbc:mysql://localhost:3306/storeproject", name, password);
-                            System.out.println("user: " + name + "password: " + password + "not admin");
+//                            System.out.println("user: " + name + "password: " + password + "not admin");
                             is_login = true;
                             userControl(user, name, db);
                             break;
+                        } else {
+                            System.out.println("wrong password!");
                         }
                     }
                     break;
@@ -144,6 +153,8 @@ public class Connector {
             } else if (answer == 3) {
                 user.close();
                 return;
+            } else {
+                System.out.println("please enter valid input!");
             }
         }
     }
