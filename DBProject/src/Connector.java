@@ -25,7 +25,10 @@ public class Connector {
                     signUp(db);
                     answer = 0;
                 } else if (answer == 2) {
-                    login(db);
+                    boolean is_login = login(db);
+                    if (!is_login) {
+                        answer = 0;
+                    }
                 } else if (answer == 3) {
                     return;
                 } else {
@@ -90,7 +93,9 @@ public class Connector {
                 System.out.print("please enter your password: ");
                 String password = input.next();
                 rs = st.executeQuery("select password from employee where password = '" + password + "';");
+                boolean is_signed = true;
                 while (rs.next()) {
+                    is_signed = false;
                     if (password.equalsIgnoreCase(rs.getString(1))) {
                         is_admin = true;
                         Connection user = DriverManager.getConnection("jdbc:mysql://localhost:3306/storeproject", name, password);
@@ -102,18 +107,25 @@ public class Connector {
                         System.out.println("wrong password!");
                     }
                 }
+                if (is_signed) {
+                    System.out.println("you need to signUp first");
+                }
                 break;
             }
         }
 
         if (!is_login) {
             rs = st.executeQuery("select name from customer;");
+
             while (rs.next()) {
+
                 if (name.equalsIgnoreCase(rs.getString(1))) {
                     System.out.print("please enter your password: ");
                     String password = input.next();
                     rs = st.executeQuery("select password from customer where password = '" + password + "';");
+                    boolean is_signed = true;
                     while (rs.next()) {
+                        is_signed = false;
                         if (password.equalsIgnoreCase(rs.getString(1))) {
                             Connection user = DriverManager.getConnection("jdbc:mysql://localhost:3306/storeproject", name, password);
 //                            System.out.println("user: " + name + "password: " + password + "not admin");
@@ -123,6 +135,9 @@ public class Connector {
                         } else {
                             System.out.println("wrong password!");
                         }
+                    }
+                    if (is_signed) {
+                        System.out.println("you need to signUp first");
                     }
                     break;
                 }
@@ -145,11 +160,9 @@ public class Connector {
             if (answer == 1) {
                 preparedQueries(db, name);
                 answer = 0;
-                break;
             } else if (answer == 2) {
                 code(user);
                 answer = 0;
-                break;
             } else if (answer == 3) {
                 user.close();
                 return;
@@ -323,7 +336,7 @@ public class Connector {
         ResultSet rs = st.executeQuery("select cu.ID , sum(b.Total_Price) as sum from customer as cu " +
                 "join cart as c on cu.ID = c.Customer_ID " +
                 "join bill as  b on b.Cart_CID = c.CID " +
-                "where b.Is_Paid = 1 and b.date between '" + last + "' and '" + first + "' group by cu.ID order by sum desc limit 10;");
+                "where b.Is_Paid = 1 and cu.name = 'test' and cu.city = 'tehran' and b.date > ' 2020-1-5' group by cu.ID order by sum desc limit 10;");
         while (rs.next()) {
             for (int i = 1; i <= 2; i++) {
                 System.out.print(rs.getString(i) + " ");
@@ -351,7 +364,7 @@ public class Connector {
     public void waresOnOff(Connection db) throws SQLException {
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("select * from ware\n" +
-                "where Discount > 15;\n");
+                "where Discount > 15 and ware.name not like ('a%') and ware.name not like ('%a%') and ware.name not like ('%a') \n");
         while (rs.next()) {
             for (int i = 1; i <= 5; i++) {
                 System.out.print(rs.getString(i) + " ");
@@ -408,7 +421,7 @@ public class Connector {
                 "from cart\n" +
                 "join customer\n" +
                 "on Customer_ID = ID\n" +
-                "where customer.name = '" + name + "' " +
+                "where customer.city =  'Tehran' and customer.name like 'a%'" +
                 "limit 10;");
         while (rs.next()) {
             for (int i = 1; i <= 9; i++) {
@@ -441,9 +454,9 @@ public class Connector {
         Statement st = db.createStatement();
         ResultSet rs = st.executeQuery("select max(rating) as rate, c.ID, w.WID, c.body from comments as c\n" +
                 "join ware as w on w.WID = c.Ware_WID\n" +
-                "where w.WID = " + ware + " group by c.ID order by rate desc limit 3;");
+                "where w.WID = " + ware + " and c.body like '%test%' group by c.ID order by rate desc limit 3;");
         while (rs.next()) {
-            for (int i = 1; i <= 9; i++) {
+            for (int i = 1; i <= 4; i++) {
                 System.out.print(rs.getString(i) + " ");
             }
             System.out.println();
@@ -467,62 +480,70 @@ public class Connector {
     }
 
     public void amountOfSell(Connection db) throws SQLException {
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yy MM dd");
-        String out = formatter.format(date);
-        StringTokenizer stt = new StringTokenizer(out);
-        int year = Integer.parseInt(stt.nextToken());
-        int month = Integer.parseInt(stt.nextToken());
-        int day = Integer.parseInt(stt.nextToken());
-        year += 2000;
-        StringBuilder last = new StringBuilder();
-        last.append(year + "-" + month + "-" + day);
-        month--;
-        StringBuilder first = new StringBuilder();
-        first.append(year + "-" + month + "-" + day);
+        if (is_admin) {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yy MM dd");
+            String out = formatter.format(date);
+            StringTokenizer stt = new StringTokenizer(out);
+            int year = Integer.parseInt(stt.nextToken());
+            int month = Integer.parseInt(stt.nextToken());
+            int day = Integer.parseInt(stt.nextToken());
+            year += 2000;
+            StringBuilder last = new StringBuilder();
+            last.append(year + "-" + month + "-" + day);
+            month--;
+            StringBuilder first = new StringBuilder();
+            first.append(year + "-" + month + "-" + day);
 
-        Scanner input = new Scanner(System.in);
-        System.out.println("which ware you want?");
-        int ware = input.nextInt();
+            Scanner input = new Scanner(System.in);
+            System.out.println("which ware you want?");
+            int ware = input.nextInt();
 
-        Statement st = db.createStatement();
-        ResultSet rs = st.executeQuery("select sum(Count), Ware_WID\n" +
-                "from bill as b\n" +
-                "join cart as c on b.Cart_CID = c.CID\n" +
-                "join ware_has_cart as whc on c.CID = whc.Cart_CID\n" +
-                "where b.date between  '2022-08-01' and '2022-08-31' and whc.Ware_WID = " + ware + " ;");
-        while (rs.next()) {
-            for (int i = 1; i <= 2; i++) {
-                System.out.print(rs.getString(i) + " ");
+            Statement st = db.createStatement();
+            ResultSet rs = st.executeQuery("select sum(Count), Ware_WID\n" +
+                    "from bill as b\n" +
+                    "join cart as c on b.Cart_CID = c.CID\n" +
+                    "join ware_has_cart as whc on c.CID = whc.Cart_CID\n" +
+                    "where b.date between  '2022-08-01' and '2022-08-31' and whc.Ware_WID = " + ware + " ;");
+            while (rs.next()) {
+                for (int i = 1; i <= 2; i++) {
+                    System.out.print(rs.getString(i) + " ");
+                }
+                System.out.println();
             }
-            System.out.println();
+        } else {
+            System.out.println("you dont have permission");
         }
     }
 
     public void avgOfSell(Connection db) throws SQLException {
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yy MM dd");
-        String out = formatter.format(date);
-        StringTokenizer stt = new StringTokenizer(out);
-        int year = Integer.parseInt(stt.nextToken());
-        int month = Integer.parseInt(stt.nextToken());
-        int day = Integer.parseInt(stt.nextToken());
-        year += 2000;
-        StringBuilder last = new StringBuilder();
-        last.append(year + "-" + month + "-" + day);
-        month--;
-        StringBuilder first = new StringBuilder();
-        first.append(year + "-" + month + "-" + day);
+        if (is_admin) {
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yy MM dd");
+            String out = formatter.format(date);
+            StringTokenizer stt = new StringTokenizer(out);
+            int year = Integer.parseInt(stt.nextToken());
+            int month = Integer.parseInt(stt.nextToken());
+            int day = Integer.parseInt(stt.nextToken());
+            year += 2000;
+            StringBuilder last = new StringBuilder();
+            last.append(year + "-" + month + "-" + day);
+            month--;
+            StringBuilder first = new StringBuilder();
+            first.append(year + "-" + month + "-" + day);
 
-        Statement st = db.createStatement();
-        ResultSet rs = st.executeQuery("select avg(Total_Price)\n" +
-                "from bill\n" +
-                "where Date between '2022-08-01' and '2022-08-31' and Is_Paid = 1;");
-        while (rs.next()) {
-            for (int i = 1; i <= 1; i++) {
-                System.out.print(rs.getString(i) + " ");
+            Statement st = db.createStatement();
+            ResultSet rs = st.executeQuery("select avg(Total_Price)\n" +
+                    "from bill\n" +
+                    "where Date between '2022-08-01' and '2022-08-31' and Is_Paid = 1;");
+            while (rs.next()) {
+                for (int i = 1; i <= 1; i++) {
+                    System.out.print(rs.getString(i) + " ");
+                }
+                System.out.println();
             }
-            System.out.println();
+        } else {
+            System.out.println("you dont have permission");
         }
     }
 
@@ -569,15 +590,25 @@ public class Connector {
         Statement st = user.createStatement();
         if (query.contains("select")) {
             ResultSet rs = st.executeQuery(query);
+
+            System.out.println(rs.getFetchSize());
             while (rs.next()) {
                 for (int i = 0; i < sy.countTokens(); i++) {
                     String s = sy.nextToken();
                     if (s.equalsIgnoreCase("from")) {
                         sy = new StringTokenizer(query);
                         break;
+
                     }
                     if (!s.equalsIgnoreCase("select") && !s.equalsIgnoreCase("from")) {
-                        System.out.print(rs.getString(i) + " ");
+                        if (!s.equalsIgnoreCase("*")) {
+                            System.out.print(rs.getString(i) + " ");
+                        } else {
+                            for (int j=1; j<=5; j++) {
+                                System.out.print(rs.getString(j) + " ");
+                            }
+                            break;
+                        }
                     }
                 }
                 System.out.println();

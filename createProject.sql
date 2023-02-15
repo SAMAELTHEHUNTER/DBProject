@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`Customer` (
 ;
 INSERT INTO Customer( Name, City, Store_ID)
 	value
-    ( 'maryam', 'Tehran', 1),
+    ( 'amaryam', 'Tehran', 1),
     ( 'fateme', 'Mashhad', 1),
     ( 'zeynab', 'Yazd', 1),
     ( 'sara', 'Booshehr', 1),
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `StoreProject`.`comments` (
 ENGINE = InnoDB;
 
 INSERT INTO comments( body , subject, Profile_PID , rating, Ware_WID, Ware_Store_ID) value
-	('aaalii', 'ez', 1, 5, 2, 1),
+	('asd test sad', 'ez', 1, 5, 2, 1),
     ('asfsafedq', 'sadas', 1, 3, 2, 1),
     ('qwdfrda', 'wdasd', 3, 1, 3, 1),
     ('wqewqsdac', 'essdsc', 4, 2, 3, 1),
